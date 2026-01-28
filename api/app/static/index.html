@@ -104,32 +104,47 @@
                 <!-- Quick Add Page -->
                 <div id="quick-add-page" class="hidden">
                      <div class="mb-4">
-                        <input type="search" id="food-search-input" placeholder="Search for a food…" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
+                        <input
+                        type="search"
+                        id="food-search-input"
+                        placeholder="Search foods..."
+                        autocomplete="off"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition"
+                        />
                     </div>
-                    <div id="search-results" class="space-y-2 mb-4">
-                        <!-- Search results here -->
-                    </div>
-                    <div id="selected-food-view" class="hidden bg-white p-6 rounded-xl border border-slate-200">
-                        <h2 id="selected-food-name" class="font-semibold text-slate-900 mb-4"></h2>
+
+                    <div id="search-results" class="space-y-2 mb-4"></div>
+                </div>
+
+                <!-- Food Detail Page -->
+                <div id="food-detail-page" class="hidden">
+                    <div class="bg-white p-6 rounded-xl border border-slate-200">
+                        <h2 id="food-detail-name" class="font-semibold text-slate-900 mb-4"></h2>
+
                         <form id="add-log-form">
-                             <input type="hidden" id="selected-food-id" name="food_id">
+                            <input type="hidden" id="food-detail-id">
+
                             <div>
                                 <label for="grams" class="text-sm font-medium text-slate-700">Amount (g)</label>
-                                <input type="number" id="grams" name="grams" value="100" required class="mt-1 block w-full rounded-xl border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
+                                <input type="number" id="grams" value="100"
+                                    class="mt-1 block w-full rounded-xl border-slate-200 px-4 py-3">
                             </div>
-                            <div class="mt-4">
-                                <h3 class="text-sm font-medium text-slate-600 uppercase tracking-wide mb-2">Nutrition</h3>
-                                <div class="text-sm space-y-1">
-                                    <p>Calories: <span id="nutrition-calories" class="font-medium text-emerald-600">0</span></p>
-                                    <p>Protein: <span id="nutrition-protein" class="font-medium text-rose-500">0</span>g</p>
-                                    <p>Carbs: <span id="nutrition-carbs" class="font-medium text-sky-500">0</span>g</p>
-                                    <p>Fat: <span id="nutrition-fat" class="font-medium text-orange-400">0</span>g</p>
-                                </div>
+
+                            <div class="mt-4 text-sm space-y-1">
+                                <p>Calories: <span id="nutrition-calories"></span></p>
+                                <p>Protein: <span id="nutrition-protein"></span>g</p>
+                                <p>Carbs: <span id="nutrition-carbs"></span>g</p>
+                                <p>Fat: <span id="nutrition-fat"></span>g</p>
                             </div>
-                            <button type="submit" class="mt-6 w-full rounded-xl bg-slate-900 py-3 text-sm font-medium text-white hover:bg-slate-800 transition">Add to Diary</button>
+
+                            <button type="submit"
+                                class="mt-6 w-full rounded-xl bg-slate-900 py-3 text-white">
+                                Add to Diary
+                            </button>
                         </form>
                     </div>
                 </div>
+
 
                 <!-- History Page -->
                 <div id="history-page" class="hidden">

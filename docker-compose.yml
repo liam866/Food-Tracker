@@ -6,7 +6,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./api/app:/app/app  # Mount the directory
+      - ./api/app:/app/data  # Mount the directory
       - ./api/food_data.csv:/app/food_data.csv
     environment:
       DATABASE_URL: "sqlite:///./data/foodtracker.db" # Database file within the mounted directory

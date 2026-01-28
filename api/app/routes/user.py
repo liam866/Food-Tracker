@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 @router.post("/user/profile", response_model=UserProfileSchema)
 async def set_user_profile(profile: UserProfileCreate, db: Session = Depends(get_db)):
+    logger.info(f"[Backend] set_user_profile: Input profile data: {profile}")
     calorie_target = calculate_calorie_target(
         height_cm=profile.height_cm,
         weight_kg=profile.weight_kg,
@@ -21,6 +22,7 @@ async def set_user_profile(profile: UserProfileCreate, db: Session = Depends(get
         goal=profile.goal,
     )
     protein_target = calculate_protein_target(weight_kg=profile.weight_kg)
+    logger.info(f"[Backend] set_user_profile: Calculated calorie_target: {calorie_target}, protein_target: {protein_target}")
 
     user_profile = db.query(UserProfile).filter(UserProfile.id == 1).first()
     if user_profile:
@@ -72,7 +74,7 @@ async def delete_user_profile(db: Session = Depends(get_db)):
         logger.error("Failed to delete profile: User profile with ID 1 not found.")
         raise HTTPException(status_code=404, detail="User profile not found")
     
-    db.delete(user_profile)
+    db.delete(user_profile);
     db.commit()
     logger.info("User profile for ID 1 successfully deleted.")
     return Response(status_code=204)

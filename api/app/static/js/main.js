@@ -4,6 +4,7 @@ import { showPage, showProfileView } from './navigation.js';
 import { renderDashboard } from './components/dashboard.js';
 import { renderProfile } from './components/profile.js';
 import { renderSearchResults, renderFoodDetail } from './components/quickAdd.js';
+import { renderLogList } from './components/log.js';
 
 // --- DOM ELEMENT REFERENCES ---
 export const views = { userSetup: document.getElementById('user-setup-view'), appShell: document.getElementById('app-shell') };
@@ -18,6 +19,7 @@ const updateInfoForm = document.getElementById('update-info-form');
 const addLogForm = document.getElementById('add-log-form');
 const foodSearchInput = document.getElementById('food-search-input');
 const searchResultsDiv = document.getElementById('search-results');
+const gramsInput = document.getElementById('grams'); // Global reference for grams input
 
 // --- EVENT LISTENERS ---
 navButtons.forEach(button => button.addEventListener('click', () => showPage(button.dataset.page)));
@@ -26,14 +28,15 @@ document.getElementById('quick-add-btn').addEventListener('click', () => {
     foodSearchInput.value = '';
     searchResultsDiv.innerHTML = '';
     const foodDetailPage = document.getElementById('food-detail-page');
-    if (foodDetailPage) foodDetailPage.classList.add('hidden'); // Ensure food detail page is hidden when returning to search
+    if (foodDetailPage) foodDetailPage.classList.add('hidden');
+    if (gramsInput) gramsInput.value = '100'; // Reset grams when entering Quick Add
 });
 document.getElementById('history-btn').addEventListener('click', () => showPage('history'));
 document.getElementById('update-goals-btn').addEventListener('click', () => showProfileView('updateGoals'));
 document.getElementById('update-info-btn').addEventListener('click', () => showProfileView('updateInfo'));
 document.getElementById('back-button').addEventListener('click', () => {
     console.log('[Back Button] Clicked.');
-    if (!pages.profile.classList.contains('hidden') && profileViews.main && profileViews.main.classList.contains('hidden')) {
+    if (pages.profile && !pages.profile.classList.contains('hidden') && profileViews.main && profileViews.main.classList.contains('hidden')) {
         console.log('[Back Button] Currently in a profile sub-view, returning to main profile.');
         showProfileView('main');
     } else if (pages.foodDetail && !pages.foodDetail.classList.contains('hidden')) {
@@ -59,8 +62,16 @@ document.getElementById('confirm-delete-btn').addEventListener('click', async ()
 
 goalButtons.forEach(btn => {
     btn.addEventListener('click', () => {
+        // Remove highlighting from all buttons first
+        goalButtons.forEach(b => {
+            b.classList.remove('bg-slate-900', 'text-white');
+            b.classList.add('bg-white', 'border-slate-200');
+        });
+        // Add highlighting to the clicked button
+        btn.classList.add('bg-slate-900', 'text-white');
+        btn.classList.remove('bg-white', 'border-slate-200');
         state.selectedGoal = btn.dataset.goal;
-        renderProfile();
+        console.log("Selected goal for update:", state.selectedGoal);
     });
 });
 
@@ -69,10 +80,13 @@ document.getElementById('save-goal-btn').addEventListener('click', async () => {
     const { name, age, height_cm, weight_kg, sex } = state.userProfile;
     const updatedProfileData = { name, age, height_cm, weight_kg, sex, goal: state.selectedGoal };
     try {
+        console.log("Saving updated goal:", updatedProfileData);
         const updatedProfile = await apiRequest('/user/profile', 'POST', updatedProfileData);
         state.userProfile = updatedProfile;
-        await initApp();
+        console.log("[Save Goal] User profile after update API call:", state.userProfile);
+        await initApp(); // Re-initialize to update dashboard and profile with new calorie/protein targets
         showProfileView('main');
+        console.log("Goal updated successfully. Re-initialized app and showed main profile view.");
     } catch (error) { console.error("Failed to update goal:", error); }
 });
 
@@ -87,10 +101,13 @@ updateInfoForm.addEventListener('submit', async (e) => {
     const fullProfile = { ...state.userProfile, ...updatedData };
     
     try {
+        console.log("Saving updated user info:", fullProfile);
         const updatedProfile = await apiRequest('/user/profile', 'POST', fullProfile);
         state.userProfile = updatedProfile;
-        await initApp();
+        console.log("[Save Info] User profile after update API call:", state.userProfile);
+        await initApp(); // Re-initialize to update dashboard and profile with new calorie/protein targets
         showProfileView('main');
+        console.log("User info updated successfully. Re-initialized app and showed main profile view.");
     } catch (error) { console.error("Failed to update info:", error); }
 });
 
@@ -103,8 +120,10 @@ userSetupForm.addEventListener('submit', async (e) => {
     profileData.weight_kg = parseFloat(profileData.weight_kg);
     
     try {
+        console.log("Creating user profile:", profileData);
         await apiRequest('/user/profile', 'POST', profileData);
         await initApp();
+        console.log("User profile created and app initialized.");
     } catch (error) { console.error("Failed to create profile:", error); }
 });
 
@@ -130,22 +149,24 @@ foodSearchInput.addEventListener("input", (e) => {
     }, 300);
 });
 
-addLogForm.addEventListener('submit', async (e) => {
+addLogForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const food_id = parseInt(document.getElementById('food-detail-id').value);
-    const grams = parseFloat(document.getElementById('grams').value);
+    const food_id = parseInt(document.getElementById("food-detail-id").value);
+    const grams = parseFloat(document.getElementById("grams").value);
 
     if (!food_id || !grams) return;
 
     try {
-        await apiRequest('/log/add', 'POST', { food_id, grams });
+        console.log(`[FoodLog] Adding food log: food_id=${food_id}, grams=${grams}`);
+        await apiRequest("/log/add", "POST", { food_id, grams });
         await initApp();
-        showPage('diary');
-    } catch (error) { console.error("Failed to add food log:", error); }
+        showPage("diary");
+        console.log("[FoodLog] Food logged and app re-initialized. Redirecting to diary.");
+    } catch (error) { console.error("[FoodLog] Failed to add food log:", error); }
 });
 
-document.getElementById('grams').addEventListener('input', () => {
-    const foodId = document.getElementById('food-detail-id').value;
+document.getElementById("grams").addEventListener("input", () => {
+    const foodId = document.getElementById("food-detail-id").value;
     if (foodId && state.foodCache[foodId]) {
         renderFoodDetail(state.foodCache[foodId]);
     }
@@ -153,26 +174,32 @@ document.getElementById('grams').addEventListener('input', () => {
 
 // --- INITIALIZATION ---
 async function initApp() {
-    console.log('[Init] App initialization started.');
+    console.log("[Init] App initialization started.");
     try {
-        const userProfile = await apiRequest('/user/profile');
+        const userProfile = await apiRequest("/user/profile");
+        console.log("[Init] User profile fetched:", userProfile);
         if (userProfile) {
             state.userProfile = userProfile;
-            const dailyLog = await apiRequest('/log/today');
+            console.log("[Init] State.userProfile updated. Calorie Target:", state.userProfile.calorie_target, "Protein Target:", state.userProfile.protein_target);
+            const dailyLog = await apiRequest("/log/today");
             state.dailyLog = dailyLog;
-            views.appShell.classList.remove('hidden');
-            views.userSetup.classList.add('hidden');
+            console.log("[Init] Daily log fetched. State.dailyLog:", state.dailyLog);
+            views.appShell.classList.remove("hidden");
+            views.userSetup.classList.add("hidden");
+            console.log("[Init] Views updated. Rendering dashboard and profile.");
             renderDashboard();
             renderProfile();
-            showPage('diary');
+            showPage("diary");
         } else {
-            views.userSetup.classList.remove('hidden');
-            views.appShell.classList.add('hidden');
+            console.log("[Init] No user profile found. Showing setup view.");
+            views.userSetup.classList.remove("hidden");
+            views.appShell.classList.add("hidden");
         }
+        console.log("[Init] App initialization completed.");
     } catch (error) {
-        console.error("Initialization failed:", error);
-        views.userSetup.classList.remove('hidden');
-        views.appShell.classList.add('hidden');
+        console.error("[Init] Initialization failed:", error);
+        views.userSetup.classList.remove("hidden");
+        views.appShell.classList.add("hidden");
     }
 }
 

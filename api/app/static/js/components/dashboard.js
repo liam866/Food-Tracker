@@ -1,5 +1,4 @@
 import { state } from "../state.js";
-import { renderLogList } from "./log.js";
 
 export function renderDashboard() {
     if (!state.userProfile || !state.dailyLog) {
@@ -7,7 +6,7 @@ export function renderDashboard() {
         return;
     }
     const { calorie_target, protein_target } = state.userProfile;
-    const { totals, logs } = state.dailyLog;
+    const { totals } = state.dailyLog;
 
     document.getElementById("calories-tracked").textContent = Math.round(totals.calories);
     document.getElementById("calories-target").textContent = Math.round(calorie_target);
@@ -19,5 +18,5 @@ export function renderDashboard() {
     const proPercent = Math.min(100, (totals.protein / protein_target) * 100);
     document.getElementById("protein-progress").style.width = `${proPercent}%`;
     
-    renderLogList(logs, "food-log-list");
+    // Removed renderLogList call for diary page
 }

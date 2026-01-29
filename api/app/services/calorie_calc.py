@@ -18,8 +18,8 @@ def calculate_calorie_target(height_cm: float, weight_kg: float, age: int, sex: 
 
     # Apply goal adjustments
     if goal.value == GoalEnum.lose_fat.value:
-        tdee -= 500
-        logger.info(f"[Backend] calculate_calorie_target: Applying lose_fat adjustment (-500 kcal). New TDEE = {tdee:.2f}")
+        tdee -= 300
+        logger.info(f"[Backend] calculate_calorie_target: Applying lose_fat adjustment (-300 kcal). New TDEE = {tdee:.2f}")
     elif goal.value == GoalEnum.build_muscle.value:
         tdee += 300
         logger.info(f"[Backend] calculate_calorie_target: Applying build_muscle adjustment (+300 kcal). New TDEE = {tdee:.2f}")

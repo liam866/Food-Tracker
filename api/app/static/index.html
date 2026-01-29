@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Food Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body class="text-slate-700">
     <div id="root" class="max-w-lg mx-auto p-4 pb-24">
@@ -93,11 +94,11 @@
                     <!-- Actions -->
                     <div class="grid grid-cols-2 gap-4 mb-6">
                         <button id="quick-add-btn" class="bg-slate-900 text-white rounded-xl py-3 text-sm font-medium hover:bg-slate-800 transition">Quick Add →</button>
-                        <button id="history-btn" class="bg-white border border-slate-200 text-slate-700 rounded-xl py-3 text-sm font-medium hover:bg-slate-100 transition">History →</button>
+                        <button id="log-btn" class="bg-white border border-slate-200 text-slate-700 rounded-xl py-3 text-sm font-medium hover:bg-slate-100 transition">Log →</button>
                     </div>
-                     <!-- Food Log -->
-                    <div id="food-log-list" class="space-y-2">
-                        <!-- Log items will be injected here -->
+                    <!-- LLM Message Box -->
+                    <div id="llm-message-box" class="bg-white p-6 rounded-xl border border-slate-200 text-center text-slate-500 text-sm mt-6">
+                        Your encouraging LLM message will appear here in a future iteration!
                     </div>
                 </div>
 
@@ -146,10 +147,10 @@
                 </div>
 
 
-                <!-- History Page -->
-                <div id="history-page" class="hidden">
-                     <div id="history-log-list" class="space-y-3">
-                        <!-- History log items will be injected here -->
+                <!-- Log Page (formerly History Page) -->
+                <div id="log-page" class="hidden">
+                     <div id="log-list" class="space-y-3">
+                        <!-- Log items will be injected here -->
                     </div>
                 </div>
                 
@@ -237,7 +238,7 @@
                 <button data-page="plan" class="nav-btn flex-1 flex flex-col items-center gap-1 p-2 rounded-lg transition text-slate-400">
                     <span>Plan</span>
                 </button>
-                <button data-page="profile" class="nav-btn flex-1 flex flex-col items-center gap-1 p-2 rounded-lg transition text-slate-400">
+                 <button data-page="profile" class="nav-btn flex-1 flex flex-col items-center gap-1 p-2 rounded-lg transition text-slate-400">
                     <span>Profile</span>
                 </button>
             </nav>

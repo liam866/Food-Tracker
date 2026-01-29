@@ -27,16 +27,23 @@ export function showPage(pageName) {
 
     const backButton = document.getElementById("back-button");
     if (backButton) {
-        if (pageName === "quickAdd" || pageName === "history" || pageName === "foodDetail") {
+        if (pageName === "quickAdd" || pageName === "log" || pageName === "foodDetail") {
             backButton.classList.remove("hidden");
         } else {
             backButton.classList.add("hidden");
         }
     }
 
-    // Specifically for the History page to load logs when navigated to
-    if (pageName === "history" && state.dailyLog) {
-        renderLogList(state.dailyLog.logs, "history-log-list");
+    // Specifically for the Log page to load logs when navigated to
+    if (pageName === "log" && state.dailyLog) {
+        console.log("[Navigation] Rendering food logs for log page.");
+        renderLogList(state.dailyLog.logs, "log-list");
+    } else if (pageName === "log") {
+        // If dailyLog is null, clear the list or show a message
+        const logListEl = document.getElementById("log-list");
+        if (logListEl) {
+            logListEl.innerHTML = `<p class="text-center text-slate-500 text-sm">No food logged yet.</p>`;
+        }
     }
 }
 

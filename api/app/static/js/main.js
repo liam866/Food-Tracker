@@ -8,7 +8,7 @@ import { renderLogList } from './components/log.js';
 
 // --- DOM ELEMENT REFERENCES ---
 export const views = { userSetup: document.getElementById('user-setup-view'), appShell: document.getElementById('app-shell') };
-export const pages = { diary: document.getElementById('diary-page'), quickAdd: document.getElementById('quick-add-page'), history: document.getElementById('history-page'), scan: document.getElementById('scan-page'), plan: document.getElementById('plan-page'), profile: document.getElementById('profile-page'), foodDetail: document.getElementById('food-detail-page') };
+export const pages = { diary: document.getElementById('diary-page'), quickAdd: document.getElementById('quick-add-page'), log: document.getElementById('log-page'), scan: document.getElementById('scan-page'), plan: document.getElementById('plan-page'), profile: document.getElementById('profile-page'), foodDetail: document.getElementById('food-detail-page') };
 export const profileViews = { main: document.getElementById('profile-main-view'), updateGoals: document.getElementById('update-goals-view'), updateInfo: document.getElementById('update-info-view') };
 export const navButtons = document.querySelectorAll('.nav-btn');
 export const pageTitle = document.getElementById('page-title');
@@ -30,8 +30,9 @@ document.getElementById('quick-add-btn').addEventListener('click', () => {
     const foodDetailPage = document.getElementById('food-detail-page');
     if (foodDetailPage) foodDetailPage.classList.add('hidden');
     if (gramsInput) gramsInput.value = '100'; // Reset grams when entering Quick Add
+    state.selectedLogId = null; // Clear selected log when going to Quick Add for a new entry
 });
-document.getElementById('history-btn').addEventListener('click', () => showPage('history'));
+document.getElementById('log-btn').addEventListener('click', () => showPage('log')); // Updated from history-btn
 document.getElementById('update-goals-btn').addEventListener('click', () => showProfileView('updateGoals'));
 document.getElementById('update-info-btn').addEventListener('click', () => showProfileView('updateInfo'));
 document.getElementById('back-button').addEventListener('click', () => {
@@ -40,8 +41,15 @@ document.getElementById('back-button').addEventListener('click', () => {
         console.log('[Back Button] Currently in a profile sub-view, returning to main profile.');
         showProfileView('main');
     } else if (pages.foodDetail && !pages.foodDetail.classList.contains('hidden')) {
-        console.log('[Back Button] Currently on food detail page, returning to Quick Add search.');
-        showPage('quickAdd');
+        console.log('[Back Button] Currently on food detail page. Checking if editing or adding...');
+        if (state.selectedLogId !== null) {
+            console.log('[Back Button] Editing existing log, returning to Diary.');
+            state.selectedLogId = null; // Clear edit state
+            showPage('diary');
+        } else {
+            console.log('[Back Button] Adding new log, returning to Quick Add search.');
+            showPage('quickAdd');
+        }
     } else {
         console.log('[Back Button] Returning to Diary page.');
         showPage('diary');
@@ -70,7 +78,7 @@ goalButtons.forEach(btn => {
         // Add highlighting to the clicked button
         btn.classList.add('bg-slate-900', 'text-white');
         btn.classList.remove('bg-white', 'border-slate-200');
-        state.selectedGoal = btn.dataset.goal;
+        state.selectedGoal = btn.dataset.goal; 
         console.log("Selected goal for update:", state.selectedGoal);
     });
 });
@@ -83,7 +91,6 @@ document.getElementById('save-goal-btn').addEventListener('click', async () => {
         console.log("Saving updated goal:", updatedProfileData);
         const updatedProfile = await apiRequest('/user/profile', 'POST', updatedProfileData);
         state.userProfile = updatedProfile;
-        console.log("[Save Goal] User profile after update API call:", state.userProfile);
         await initApp(); // Re-initialize to update dashboard and profile with new calorie/protein targets
         showProfileView('main');
         console.log("Goal updated successfully. Re-initialized app and showed main profile view.");
@@ -104,7 +111,6 @@ updateInfoForm.addEventListener('submit', async (e) => {
         console.log("Saving updated user info:", fullProfile);
         const updatedProfile = await apiRequest('/user/profile', 'POST', fullProfile);
         state.userProfile = updatedProfile;
-        console.log("[Save Info] User profile after update API call:", state.userProfile);
         await initApp(); // Re-initialize to update dashboard and profile with new calorie/protein targets
         showProfileView('main');
         console.log("User info updated successfully. Re-initialized app and showed main profile view.");
@@ -128,7 +134,7 @@ userSetupForm.addEventListener('submit', async (e) => {
 });
 
 let searchTimeout;
-foodSearchInput.addEventListener("input", (e) => {
+document.getElementById('food-search-input').addEventListener("input", (e) => {
     console.log("[QuickAdd] Food search input changed:", e.target.value);
     clearTimeout(searchTimeout);
     const query = e.target.value;
@@ -156,13 +162,26 @@ addLogForm.addEventListener("submit", async (e) => {
 
     if (!food_id || !grams) return;
 
+    let apiEndpoint = '';
+    let apiMethod = '';
+
+    if (state.selectedLogId !== null) {
+        console.log(`[FoodLog] Updating existing food log ID: ${state.selectedLogId}`);
+        apiEndpoint = `/log/${state.selectedLogId}`;
+        apiMethod = "PUT";
+    } else {
+        console.log("[FoodLog] Adding new food log.");
+        apiEndpoint = "/log/add";
+        apiMethod = "POST";
+    }
+
     try {
-        console.log(`[FoodLog] Adding food log: food_id=${food_id}, grams=${grams}`);
-        await apiRequest("/log/add", "POST", { food_id, grams });
+        await apiRequest(apiEndpoint, apiMethod, { food_id, grams });
+        state.selectedLogId = null; // Clear selected log after update/add
         await initApp();
         showPage("diary");
-        console.log("[FoodLog] Food logged and app re-initialized. Redirecting to diary.");
-    } catch (error) { console.error("[FoodLog] Failed to add food log:", error); }
+        console.log("[FoodLog] Food log saved and app re-initialized. Redirecting to diary.");
+    } catch (error) { console.error("Failed to save food log:", error); }
 });
 
 document.getElementById("grams").addEventListener("input", () => {
@@ -173,7 +192,7 @@ document.getElementById("grams").addEventListener("input", () => {
 });
 
 // --- INITIALIZATION ---
-async function initApp() {
+export async function initApp() {
     console.log("[Init] App initialization started.");
     try {
         const userProfile = await apiRequest("/user/profile");

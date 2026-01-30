@@ -1,6 +1,7 @@
 import { apiRequest } from "../api.js";
 import { state } from "../state.js";
 import { saveLLMResponse, loadLLMResponse, clearLLMResponse } from "../utils/localStorage.js";
+import { setAiOverviewLoadingState } from "../components/aiOverview.js";
 
 export async function getAiOverviewData(forceNewRequest = false) {
     console.log(`[AI Logic] Initiating AI overview data retrieval. Force new request: ${forceNewRequest}`);
@@ -50,6 +51,7 @@ export async function getAiOverviewData(forceNewRequest = false) {
 
     // Proceed to make an LLM request
     console.log("[AI Logic] Latest log is from today. Sending LLM request...");
+    setAiOverviewLoadingState();
     try {
         aiResponseData = await apiRequest("/chat", "POST");
         console.log("[AI Logic] LLM response received successfully. Saving and returning.", aiResponseData);

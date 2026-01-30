@@ -1,3 +1,10 @@
+export function setAiOverviewLoadingState() {
+    const aiOverviewMessages = document.getElementById("ai-overview-messages");
+    if (aiOverviewMessages) {
+        aiOverviewMessages.innerHTML = `<li class="text-center text-slate-500">Generating...</li>`;
+    }
+}
+
 export function renderAiOverview(result) {
     console.log("[AI Overview] Rendering AI overview with result:", result);
     const aiOverviewMessages = document.getElementById("ai-overview-messages");
@@ -19,8 +26,8 @@ export function renderAiOverview(result) {
     const { progress, improvement, encouragement } = result.data;
     console.log("[AI Overview] Displaying AI generated content.");
     aiOverviewMessages.innerHTML = `
-        <li><strong>Progress:</strong> ${progress}</li>
-        <li><strong>Improvement:</strong> ${improvement}</li>
-        <li><strong>Encouragement:</strong> ${encouragement}</li>
+        <li> ${progress}</li>
+        <li> ${improvement}</li>
+        <li> ${encouragement}</li>
     `;
 }

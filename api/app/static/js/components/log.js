@@ -53,7 +53,7 @@ export function renderLogList(logs, listId) {
                 </div>
             </div>
         `;
-        listEl.prepend(logItem);
+        listEl.append(logItem);
 
         // Attach event listeners to the new buttons
         document.getElementById(`edit-log-${log.id}`).addEventListener("click", async () => {

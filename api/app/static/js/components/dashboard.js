@@ -17,6 +17,4 @@ export function renderDashboard() {
     document.getElementById("protein-target").textContent = Math.round(protein_target);
     const proPercent = Math.min(100, (totals.protein / protein_target) * 100);
     document.getElementById("protein-progress").style.width = `${proPercent}%`;
-    
-    // Removed renderLogList call for diary page
-}
+    }

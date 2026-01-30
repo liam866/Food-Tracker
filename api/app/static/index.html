@@ -96,9 +96,12 @@
                         <button id="quick-add-btn" class="bg-slate-900 text-white rounded-xl py-3 text-sm font-medium hover:bg-slate-800 transition">Quick Add →</button>
                         <button id="log-btn" class="bg-white border border-slate-200 text-slate-700 rounded-xl py-3 text-sm font-medium hover:bg-slate-100 transition">Log →</button>
                     </div>
-                    <!-- LLM Message Box -->
-                    <div id="llm-message-box" class="bg-white p-6 rounded-xl border border-slate-200 text-center text-slate-500 text-sm mt-6">
-                        Your encouraging LLM message will appear here in a future iteration!
+                    <!-- AI Overview Component -->
+                    <div id="ai-overview-component" class="bg-white p-6 rounded-xl border border-slate-200 text-sm mt-6">
+                        <h3 class="text-sm font-medium text-slate-600 uppercase tracking-wide mb-4">AI Overview</h3>
+                        <ul id="ai-overview-messages" class="list-disc list-inside space-y-2">
+                            <!-- AI messages will be injected here -->
+                        </ul>
                     </div>
                 </div>
 
@@ -237,6 +240,9 @@
                 </button>
                 <button data-page="plan" class="nav-btn flex-1 flex flex-col items-center gap-1 p-2 rounded-lg transition text-slate-400">
                     <span>Plan</span>
+                </button>
+                <button data-page="log" class="nav-btn flex-1 flex flex-col items-center gap-1 p-2 rounded-lg transition text-slate-400">
+                    <span>Log</span>
                 </button>
                  <button data-page="profile" class="nav-btn flex-1 flex flex-col items-center gap-1 p-2 rounded-lg transition text-slate-400">
                     <span>Profile</span>

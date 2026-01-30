@@ -5,6 +5,9 @@ import { renderDashboard } from './components/dashboard.js';
 import { renderProfile } from './components/profile.js';
 import { renderSearchResults, renderFoodDetail } from './components/quickAdd.js';
 import { renderLogList } from './components/log.js';
+import { renderAiOverview } from './components/aiOverview.js';
+import { getAiOverviewData } from "./services/aiLogic.js";
+
 
 // --- DOM ELEMENT REFERENCES ---
 export const views = { userSetup: document.getElementById('user-setup-view'), appShell: document.getElementById('app-shell') };
@@ -162,8 +165,8 @@ addLogForm.addEventListener("submit", async (e) => {
 
     if (!food_id || !grams) return;
 
-    let apiEndpoint = '';
-    let apiMethod = '';
+    let apiEndpoint = "";
+    let apiMethod = "";
 
     if (state.selectedLogId !== null) {
         console.log(`[FoodLog] Updating existing food log ID: ${state.selectedLogId}`);
@@ -180,6 +183,10 @@ addLogForm.addEventListener("submit", async (e) => {
         state.selectedLogId = null; // Clear selected log after update/add
         await initApp();
         showPage("diary");
+
+        const aiResult = await getAiOverviewData(true); // Force new request on new log
+        renderAiOverview(aiResult);
+
         console.log("[FoodLog] Food log saved and app re-initialized. Redirecting to diary.");
     } catch (error) { console.error("Failed to save food log:", error); }
 });
@@ -209,6 +216,8 @@ export async function initApp() {
             renderDashboard();
             renderProfile();
             showPage("diary");
+            const aiResult = await getAiOverviewData(false); // Do not force new request on init
+            renderAiOverview(aiResult);
         } else {
             console.log("[Init] No user profile found. Showing setup view.");
             views.userSetup.classList.remove("hidden");

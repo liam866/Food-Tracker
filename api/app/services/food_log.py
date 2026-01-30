@@ -62,11 +62,16 @@ def get_today_food_logs_service(db: Session):
     start_of_day = datetime.combine(today, datetime.min.time())
     end_of_day = datetime.combine(today, datetime.max.time())
 
-    logs = db.query(FoodLog, Food).filter(
-        FoodLog.food_id == Food.id,
-        FoodLog.datetime >= start_of_day,
-        FoodLog.datetime <= end_of_day
-    ).all()
+    logs = (
+        db.query(FoodLog, Food)
+        .filter(
+            FoodLog.food_id == Food.id,
+            FoodLog.datetime >= start_of_day,
+            FoodLog.datetime <= end_of_day
+        )
+        .order_by(FoodLog.datetime.desc())
+        .all()
+    )
 
     total_calories = sum(log.FoodLog.calories for log in logs)
     total_protein = sum(log.FoodLog.protein for log in logs)

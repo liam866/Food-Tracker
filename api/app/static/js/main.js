@@ -73,12 +73,10 @@ document.getElementById('confirm-delete-btn').addEventListener('click', async ()
 
 goalButtons.forEach(btn => {
     btn.addEventListener('click', () => {
-        // Remove highlighting from all buttons first
         goalButtons.forEach(b => {
             b.classList.remove('bg-slate-900', 'text-white');
             b.classList.add('bg-white', 'border-slate-200');
         });
-        // Add highlighting to the clicked button
         btn.classList.add('bg-slate-900', 'text-white');
         btn.classList.remove('bg-white', 'border-slate-200');
         state.selectedGoal = btn.dataset.goal; 

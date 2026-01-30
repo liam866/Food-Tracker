@@ -1,7 +1,7 @@
 import logging
 from typing import Optional, Tuple
 
-from app.db.models import FoodLog, Food # Removed UserProfile
+from app.db.models import FoodLog, Food 
 
 logger = logging.getLogger(__name__)
 

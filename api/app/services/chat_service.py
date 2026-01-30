@@ -1,13 +1,12 @@
 import logging
 import json
 import re
-from typing import TYPE_CHECKING  # For type hinting without circular imports
+from typing import TYPE_CHECKING  
 
 from app.schemas.chat import ChatResponse
 from app.schemas.ollama import OllamaGenerateRequest
 from app.core.config import settings
 
-# Conditional import for type hinting only
 if TYPE_CHECKING:
     from api.app.services.ollama_client import OllamaClient 
 

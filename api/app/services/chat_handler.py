@@ -8,7 +8,7 @@ from app.schemas.ollama import OllamaGenerateRequest
 from app.core.config import settings
 
 if TYPE_CHECKING:
-    from api.app.services.ollama_client import OllamaClient 
+    from app.clients.ollama_client import OllamaClient 
 
 logger = logging.getLogger(__name__)
 

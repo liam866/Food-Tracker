@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.lifespan import lifespan_handler
 from app.routes import foods, logs, user, chat
-from app.services.ollama_client import OllamaClient # Import OllamaClient
+from app.clients.ollama_client import OllamaClient # Import OllamaClient
 from app.core.config import settings # Import settings
 from app.schemas.ollama import OllamaGenerateRequest # Import for health check
 

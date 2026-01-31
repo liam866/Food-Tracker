@@ -10,3 +10,12 @@ services:
       - ./api/food_data.csv:/app/food_data.csv
     environment:
       DATABASE_URL: "sqlite:///./data/foodtracker.db" # Database file within the mounted directory
+
+  vision:
+    build: ./vision
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./vision/app:/app/app
+    environment:
+      - PYTHONUNBUFFERED=1

@@ -4,7 +4,7 @@ from typing import List
 class ChatRequest(BaseModel):
     prompt: str
 
-class ChatResponse(BaseModel):
+class ChatOverviewResponse(BaseModel):
     progress: str
     improvement: str
     encouragement: str

@@ -1,5 +1,5 @@
 import logging
-from app.db.models import SexEnum, GoalEnum
+from app.schemas.user import SexEnum, GoalEnum
 
 logger = logging.getLogger(__name__)
 

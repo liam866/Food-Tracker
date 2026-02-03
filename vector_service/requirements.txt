@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+qdrant-client
+sqlalchemy
+httpx
+pydantic-settings
+pandas
+python-multipart

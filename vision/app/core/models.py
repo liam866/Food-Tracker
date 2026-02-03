@@ -10,9 +10,8 @@ class ModelManager:
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super(ModelManager, cls).__new__(cls)
-            cls._instance.ocr = None
-            cls._instance.layout_processor = None
-            cls._instance.layout_model = None
+            cls._instance.detector = None
+            cls._instance.recognizer = None  # Reserved for Milestone 3
             cls._instance.initialized = False
         return cls._instance
 
@@ -24,24 +23,24 @@ class ModelManager:
         logger.info("Loading Vision Models...")
         
         try:
-            # Verify imports to ensure dependencies are present
+            # Verify imports
             import cv2
             import numpy as np
             from paddleocr import PaddleOCR
-            from transformers import LayoutLMv3Processor, LayoutLMv3ForTokenClassification
-            import torch
 
-            # TODO: Uncomment for Milestone 2+ when real inference is needed
-            # logger.info("Initializing PaddleOCR...")
-            # self.ocr = PaddleOCR(use_angle_cls=True, lang='en', use_gpu=False, show_log=False)
+            # Initialize PaddleOCR (Detection Only)
+            logger.info("Initializing PaddleOCR Detector...")
+            # det=True, rec=False means layout detection only (bounding boxes)
+            # use_angle_cls=True helps with rotated text
+            # lang='en' is default
+            self.detector = PaddleOCR(use_angle_cls=True, lang='en', det=True, rec=False, use_gpu=False, show_log=False)
             
-            logger.info("Initializing LayoutLMv3...")
-            self.layout_processor = LayoutLMv3Processor.from_pretrained("microsoft/layoutlmv3-base")
-            self.layout_model = LayoutLMv3ForTokenClassification.from_pretrained("microsoft/layoutlmv3-base")
+            # Initialize Recognizer
+            logger.info("Initializing PaddleOCR Recognizer...")
+            self.recognizer = PaddleOCR(use_angle_cls=True, lang='en', det=False, rec=True, use_gpu=False, show_log=False)
 
-            # For Milestone 1, we consider success if libraries are importable
             self.initialized = True
-            logger.info("Vision Models established (Imports verified).")
+            logger.info("Vision Models established (Detector & Recognizer Loaded).")
             
         except ImportError as e:
             logger.error(f"Failed to import required ML libraries: {e}")
@@ -51,6 +50,6 @@ class ModelManager:
             raise e
 
     def check_health(self):
-        return self.initialized
+        return self.initialized and self.detector is not None
 
 model_manager = ModelManager()

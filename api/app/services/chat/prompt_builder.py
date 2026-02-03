@@ -1,17 +1,19 @@
 import logging
-from typing import Optional, Tuple
-
-from app.db.models import FoodLog, Food 
+from typing import Optional, Any, List
 
 logger = logging.getLogger(__name__)
 
-def build_chat_prompt(latest_food_log: Optional[Tuple[FoodLog, Food]]) -> str:
+def build_chat_prompt(latest_food_log: Optional[List[Any]]) -> str:
     logger.info("[PromptBuilder] Building chat prompt...")
     prompt_parts = []
 
     if latest_food_log:
         log_entry, food_item = latest_food_log
-        prompt_parts.append(f"Most recently eaten food: {food_item.name}, Protein: {log_entry.protein}g.")
+        # Access attributes (SimpleNamespace or dict converted object)
+        food_name = getattr(food_item, 'name', 'Unknown Food')
+        protein = getattr(log_entry, 'protein', 0)
+        
+        prompt_parts.append(f"Most recently eaten food: {food_name}, Protein: {protein}g.")
     else:
         prompt_parts.append("No food logs available.")
 

@@ -1,15 +1,50 @@
 version: "3.8"
 
 services:
+  qdrant:
+    image: qdrant/qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+
+  relational:
+    build: ./relational
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./relational/app:/app/app
+      - ./data:/app/data
+      - ./api/food_data.csv:/app/food_data.csv
+    environment:
+      DATABASE_URL: "sqlite:///./data/foodtracker.db"
+      VECTOR_SERVICE_URL: "http://vector:8000"
+
+  vector:
+    build: ./vector_service
+    ports:
+      - "8003:8000"
+    volumes:
+      - ./vector_service/app:/app/app
+    environment:
+      QDRANT_URL: "http://qdrant:6333"
+      OLLAMA_BASE_URL: "http://host.docker.internal:11434"
+      OLLAMA_MODEL: "all-minilm"
+    depends_on:
+      - qdrant
+
   api:
     build: ./api
     ports:
       - "8000:8000"
     volumes:
-      - ./api/app:/app/data  # Mount the directory
-      - ./api/food_data.csv:/app/food_data.csv
+      - ./api/app:/app/app
     environment:
-      DATABASE_URL: "sqlite:///./data/foodtracker.db" # Database file within the mounted directory
+      RELATIONAL_SERVICE_URL: "http://relational:8000"
+      OLLAMA_BASE_URL: "http://host.docker.internal:11434" 
+      OLLAMA_MODEL: "qwen2.5:0.5b"
+    depends_on:
+      - relational
 
   vision:
     build: ./vision
@@ -19,3 +54,6 @@ services:
       - ./vision/app:/app/app
     environment:
       - PYTHONUNBUFFERED=1
+
+volumes:
+  qdrant_storage:

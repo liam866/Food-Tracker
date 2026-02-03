@@ -17,6 +17,8 @@ from contextlib import asynccontextmanager
 from app.core.models import model_manager
 from app.core.preprocessing import preprocess_image
 from app.core.layout import layout_detector
+from app.core.ocr import ocr_processor
+from app.core.merger import merger
 from app.schemas import MenuResponse, MenuItem
 
 
@@ -56,12 +58,20 @@ async def extract_menu(image: UploadFile = File(...)):
         # This verifies ingestion and preprocessing works deterministically
         processed_image = preprocess_image(content)
         
-        # Layout Extraction (Milestone 3)
-        # Detect bounding boxes for sections, items, descriptions, prices
+        # Layout Extraction (Milestone 2)
+        # Detect text regions using PaddleOCR (Bounding Box Only)
         layout_items = layout_detector.detect(processed_image, model_manager)
-        logger.info(f"Layout Extraction: Detected {len(layout_items)} items")
+        logger.info(f"Layout Extraction: Detected {len(layout_items)} text regions")
         
-        # In future milestones: OCR -> Merge
+        # OCR Recognition (Milestone 4)
+        # Recognize text in each region
+        ocr_items = ocr_processor.recognize(processed_image, layout_items, model_manager)
+        
+        # Merge (Milestone 5)
+        # Combine geometry + text into final MenuItem objects
+        menu_items = merger.merge(ocr_items)
+        
+        return {"items": menu_items}
         
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -69,13 +79,3 @@ async def extract_menu(image: UploadFile = File(...)):
         logger.error(f"Error processing image: {e}")
         raise HTTPException(status_code=500, detail="Internal processing error")
 
-    return {
-        "items": [
-            {
-                "section": "Mains",
-                "name": "Grilled Chicken Salad",
-                "description": "Mixed greens, lemon dressing",
-                "price": 22
-            }
-        ]
-    }

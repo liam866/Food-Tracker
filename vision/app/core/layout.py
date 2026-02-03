@@ -1,56 +1,109 @@
 import logging
 import numpy as np
-from typing import List, Optional
+from typing import List, Optional, Any
 from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 
 class ItemData(BaseModel):
-    label: str  # "section_header", "item_name", "description", "price"
+    label: Optional[str] = None
     text: Optional[str] = None
     bbox: List[int]  # [x1, y1, x2, y2]
 
+def polygon_to_bbox(polygon: np.ndarray, image_shape: tuple) -> Optional[List[int]]:
+    """
+    Converts a polygon (N points) to an axis-aligned bounding box [x1, y1, x2, y2].
+    Ensures coordinates are within image bounds.
+    """
+    try:
+        x_coords = polygon[:, 0]
+        y_coords = polygon[:, 1]
+        
+        x1 = int(np.min(x_coords))
+        y1 = int(np.min(y_coords))
+        x2 = int(np.max(x_coords))
+        y2 = int(np.max(y_coords))
+        
+        h, w = image_shape[:2]
+        x1 = max(0, x1)
+        y1 = max(0, y1)
+        x2 = min(w, x2)
+        y2 = min(h, y2)
+        
+        if x2 <= x1 or y2 <= y1:
+            return None
+            
+        return [x1, y1, x2, y2]
+    except Exception as e:
+        logger.warning(f"Failed to convert polygon to bbox: {e}")
+        return None
+
 class LayoutDetector:
     def detect(self, image: np.ndarray, model_manager) -> List[ItemData]:
-        logger.info(f"Running Layout Detection on image shape: {image.shape}")
+        """
+        Runs PaddleOCR layout detection (det=True, rec=False).
+        Returns ItemData with bbox populated.
+        """
+        logger.info(f"Running PaddleOCR Layout Detection on image shape: {image.shape}")
         
         items = []
         try:
-            # In a full implementation, we would pass OCR results here too.
-            # For now, we attempt to run the processor on the image.
-            # Note: LayoutLMv3ForTokenClassification typically requires input_ids (text).
-            # Without text, we might strictly rely on visual features if configured, 
-            # or we need to run OCR first (contrary to the pipeline order).
+            if not model_manager.detector:
+                 logger.error("PaddleOCR detector not initialized.")
+                 return []
+
+            # Run PaddleOCR inference
+            # result is typically a list of results (one per image passed)
+            result = model_manager.detector.ocr(image, cls=True)
             
-            # processor = model_manager.layout_processor
-            # model = model_manager.layout_model
+            # If no text detected, result might be [None] or empty list
+            if not result or result[0] is None:
+                logger.info("PaddleOCR detected no text regions.")
+                return []
+
+            boxes = result[0]
+            logger.info(f"PaddleOCR detected {len(boxes)} raw regions.")
+
+            for i, box_raw in enumerate(boxes):
+                if i == 0:
+                    logger.info(f"Sample box_raw type: {type(box_raw)}")
+                    logger.info(f"Sample box_raw: {box_raw}")
+
+                try:
+                    # Handle case where box_raw is [coords, score] which causes shape (2,) error
+                    if isinstance(box_raw, (list, tuple)) and len(box_raw) == 2:
+                        # If first element looks like 4 points, take it
+                        if isinstance(box_raw[0], (list, np.ndarray)) and len(box_raw[0]) == 4:
+                            box_raw = box_raw[0]
+
+                    # Convert raw box to numpy array
+                    if isinstance(box_raw, list):
+                        box = np.array(box_raw, dtype=np.float32)
+                    elif isinstance(box_raw, np.ndarray):
+                        box = box_raw.astype(np.float32)
+                    else:
+                        logger.warning(f"Skipping box {i} with unknown type: {type(box_raw)}")
+                        continue
+                    
+                    # Validate shape (should be at least 3 points to form a region)
+                    if box.ndim != 2 or box.shape[0] < 3 or box.shape[1] != 2:
+                        logger.warning(f"Skipping box {i} with invalid shape: {box.shape}")
+                        continue
+                    
+                    bbox = polygon_to_bbox(box, image.shape)
+                    if bbox:
+                        items.append(ItemData(label=None, text=None, bbox=bbox))
+                    else:
+                        logger.debug(f"Skipping invalid/empty bbox for box {i}")
+                    
+                except Exception as ex:
+                    logger.warning(f"Error processing box {i}: {ex}")
+                    continue
             
-            # inputs = processor(images=image, return_tensors="pt")
-            # outputs = model(**inputs)
-            
-            # For Milestone 3, since we lack the full Object Detection head or OCR inputs,
-            # we will return simulated bounding boxes to demonstrate the data flow.
-            # This allows Milestone 4 (OCR) to proceed by cropping these regions.
-            
-            h, w = image.shape[:2]
-            
-            # Simulate a "Section Header" at the top
-            items.append(ItemData(label="section_header", bbox=[10, 10, w-10, 50]))
-            
-            # Simulate a "Item Name"
-            items.append(ItemData(label="item_name", bbox=[10, 60, int(w*0.6), 100]))
-            
-            # Simulate a "Description"
-            items.append(ItemData(label="description", bbox=[10, 110, int(w*0.6), 150]))
-            
-            # Simulate a "Price"
-            items.append(ItemData(label="price", bbox=[int(w*0.7), 60, w-10, 100]))
-            
-            logger.info(f"Layout Detection complete. Found {len(items)} items (Simulated).")
+            logger.info(f"Layout Detection complete. Processed {len(items)} valid bounding boxes.")
             
         except Exception as e:
-            logger.error(f"Layout detection failed: {e}")
-            # Fail gracefully
+            logger.error(f"Layout detection critical failure: {e}")
             pass
             
         return items

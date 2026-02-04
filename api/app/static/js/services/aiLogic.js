@@ -31,23 +31,19 @@ export async function getAiOverviewData(forceNewRequest = false) {
         };
     }
 
-    const logDate = new Date(latestLog.datetime);
-    const today = new Date();
+        const logDateString = new Date(latestLog.datetime).toISOString().split('T')[0];
+        const todayDateString = new Date().toISOString().split('T')[0];
 
-    const isToday =
-        logDate.getDate() === today.getDate() &&
-        logDate.getMonth() === today.getMonth() &&
-        logDate.getFullYear() === today.getFullYear();
+        const isToday = logDateString === todayDateString;
 
-    // Latest log is not today
-    if (!isToday) {
-        console.log("[AI Logic] Latest food log is not from today. Returning default 'Start logging' message and clearing saved response.");
-        clearLLMResponse();
-        return {
-            type: "empty",
-            message: "Start logging"
-        };
-    }
+        if (!isToday) {
+            console.log(`[AI Logic] Log date (${logDateString}) does not match today (${todayDateString}).`);
+            clearLLMResponse();
+            return {
+                type: "empty",
+                message: "Start logging"
+            };
+        }
 
     // Proceed to make an LLM request
     console.log("[AI Logic] Latest log is from today. Sending LLM request...");

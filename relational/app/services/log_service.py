@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from app.relational import models
 from app.schemas.internal import LogCreate, LogUpdate
-from datetime import datetime
+from datetime import datetime, timezone
 
 def add_food_log(log_data: LogCreate, db: Session):
     food = db.query(models.Food).filter(models.Food.id == log_data.food_id).first()
@@ -54,7 +54,7 @@ def delete_log(log_id: int, db: Session):
     return {"success": True}
 
 def get_today_logs(db: Session):
-    today = datetime.now().date()
+    today = datetime.now(timezone.utc).date()
     start = datetime.combine(today, datetime.min.time())
     end = datetime.combine(today, datetime.max.time())
     

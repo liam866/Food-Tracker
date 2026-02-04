@@ -3,7 +3,6 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 
 # from sqlalchemy.orm import Session # Remove
 
-# from app.db.database import get_db # Remove
 from app.schemas.chat import ChatOverviewResponse
 from app.clients.ollama_client import OllamaClient 
 from app.clients.relational_client import RelationalClient, get_relational_client

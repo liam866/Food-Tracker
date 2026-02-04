@@ -7,6 +7,7 @@ services:
       - "6333:6333"
     volumes:
       - qdrant_storage:/qdrant/storage
+    env_file: .env
 
   relational:
     build: ./relational
@@ -16,21 +17,13 @@ services:
       - ./relational/app:/app/app
       - ./data:/app/data
       - ./relational/food_data.csv:/app/food_data.csv
+    env_file: .env
     environment:
-      DATABASE_URL: "sqlite:///./data/foodtracker.db"
-
-  vector:
-    build: ./vector_service
-    ports:
-      - "8003:8000"
-    volumes:
-      - ./vector_service/app:/app/app
-    environment:
-      QDRANT_URL: "http://qdrant:6333"
-      OLLAMA_BASE_URL: "http://host.docker.internal:11434"
-      OLLAMA_MODEL: "all-minilm"
+      - PYTHONUNBUFFERED=1
     depends_on:
-      - qdrant
+      - vector
+
+ 
 
   api:
     build: ./api
@@ -38,13 +31,21 @@ services:
       - "8000:8000"
     volumes:
       - ./api/app:/app/app
+    env_file: .env
     environment:
-      RELATIONAL_SERVICE_URL: "http://relational:8000"
-      OLLAMA_BASE_URL: "http://host.docker.internal:11434" 
-      OLLAMA_MODEL: "qwen2.5:0.5b"
+      OLLAMA_MODEL: ${CHAT_MODEL}
     depends_on:
-      - relational
-      - vector
+      - relational vector:
+    build: ./vector_service
+    ports:
+      - "8003:8000"
+    volumes:
+      - ./vector_service/app:/app/app
+    env_file: .env
+    environment:
+      OLLAMA_MODEL: ${EMBED_MODEL}
+    depends_on:
+      - qdrant
 
   vision:
     build: ./vision
@@ -52,6 +53,7 @@ services:
       - "8001:8000"
     volumes:
       - ./vision/app:/app/app
+    env_file: .env
     environment:
       - PYTHONUNBUFFERED=1
 

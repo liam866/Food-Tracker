@@ -9,33 +9,38 @@ logger = logging.getLogger(__name__)
 
 async def seed_data(db: Session, vector_client: VectorClient):
     try:
-        # 1. Check if vector service has data
+        logger.info("Checking vector service status...")
         count = await vector_client.count("foods")
         if count > 0:
-            logger.info(f"Vector collection has {count} items. Skipping seeding.")
+            logger.info(f"Vector collection 'foods' already has {count} items. Seeding not required.")
             return
 
-        logger.info("Seeding data...")
-        # 2. Read CSV
+        logger.info(f"Vector collection is empty (count={count}). Starting seeding process...")
+        
         try:
             df = pd.read_csv("/app/food_data.csv")
+            logger.info(f"Loaded CSV with {len(df)} rows.")
         except Exception as e:
             logger.error(f"Failed to read CSV: {e}")
             return
 
-        # 3. Process
         to_embed = []
         
         for index, row in df.iterrows():
-            # Check/Create in SQL
-            existing = db.query(models.Food).filter(models.Food.name == row['name']).first()
+            name = row['Description']
+            calories = row['Data.Calories']
+            protein = row['Data.Protein']
+            carbs = row['Data.Carbohydrate']
+            fat = row['Data.Fat.Total Lipid']
+            
+            existing = db.query(models.Food).filter(models.Food.name == name).first()
             if not existing:
                 food = models.Food(
-                    name=row['name'],
-                    calories_per_100g=row['calories'],
-                    protein_per_100g=row['protein'],
-                    carbs_per_100g=row['carbs'],
-                    fat_per_100g=row['fat']
+                    name=name,
+                    calories_per_100g=calories,
+                    protein_per_100g=protein,
+                    carbs_per_100g=carbs,
+                    fat_per_100g=fat
                 )
                 db.add(food)
                 db.commit()
@@ -46,18 +51,17 @@ async def seed_data(db: Session, vector_client: VectorClient):
             
             to_embed.append({
                 "id": food_id,
-                "text": row['name'],
+                "text": name,
                 "payload": {
-                    "food_name": row['name'],
-                    "calories": row['calories'],
-                    "protein": row['protein']
+                    "food_name": name,
+                    "calories": calories,
+                    "protein": protein
                 }
             })
         
         logger.info(f"Prepared {len(to_embed)} items for embedding.")
         
-        # 4. Parallel Embedding
-        sem = asyncio.Semaphore(10) 
+        sem = asyncio.Semaphore(500) 
         
         async def process_item(item):
             async with sem:
@@ -76,8 +80,7 @@ async def seed_data(db: Session, vector_client: VectorClient):
         valid_points = [p for p in results if p]
         
         if valid_points:
-            # Upsert in chunks
-            chunk_size = 100
+            chunk_size = 500
             for i in range(0, len(valid_points), chunk_size):
                 chunk = valid_points[i:i+chunk_size]
                 success = await vector_client.upsert(chunk)

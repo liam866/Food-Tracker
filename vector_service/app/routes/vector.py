@@ -23,7 +23,7 @@ async def embed(request: EmbedRequest):
 
 @router.post("/search")
 async def search(request: SearchRequest):
-    return await vector_service.search(request.vector, request.limit, request.score_threshold)
+    return vector_service.search(request.vector, request.limit, request.score_threshold)
 
 @router.post("/upsert")
 async def upsert(request: UpsertRequest):
@@ -33,10 +33,10 @@ async def upsert(request: UpsertRequest):
 @router.get("/collections/{name}")
 async def get_collection(name: str):
     try:
-        vector_service.ensure_collection(name)
-        return {"exists": True}
-    except Exception:
-        return {"exists": False}
+        exists = vector_service.check_collection_exists(name)
+        return {"exists": exists}
+    except Exception as e:
+        raise HTTPException(status_code=503, detail=f"Vector DB error: {e}")
 
 @router.put("/collections/{name}")
 async def create_collection(name: str):
@@ -48,5 +48,8 @@ async def create_collection(name: str):
 
 @router.get("/collections/{name}/count")
 async def count_collection(name: str):
-    count = vector_service.count_points(name)
-    return {"count": count}
+    try:
+        count = vector_service.count_points(name)
+        return {"count": count}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

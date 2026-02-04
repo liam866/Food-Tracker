@@ -17,11 +17,16 @@ async def lifespan(app: FastAPI):
     # Initialize DB
     models.Base.metadata.create_all(bind=engine)
     
-    # Ensure collection exists
-    await vector_client.ensure_collection("foods")
-    
-    db = next(get_db())
-    await seed_data(db, vector_client)
+    # Wait for Vector Service
+    if not await vector_client.wait_for_service():
+        logger.error("Vector service unavailable. Skipping vector operations.")
+    else:
+        # Ensure collection exists
+        await vector_client.ensure_collection("foods")
+        
+        db = next(get_db())
+        await seed_data(db, vector_client)
+        db.close()
     db.close()
     
     yield

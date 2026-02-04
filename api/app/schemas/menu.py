@@ -1,5 +1,9 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
+
+class MenuRecommendation(BaseModel):
+    name: str
+    reasoning: str
 
 class MenuAnalysisResponse(BaseModel):
-    pass
+    recommendations: List[MenuRecommendation]

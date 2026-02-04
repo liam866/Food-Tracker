@@ -22,7 +22,7 @@ class OllamaClient:
             response = await self.client.post(url, headers=headers, content=data, timeout=60.0)
             response.raise_for_status()
             raw_response_data = response.json()
-            logger.info(f"[OllamaClient] Received raw response (status {response.status_code}): {raw_response_data}")
+            logger.info(f"[OllamaClient] Received raw response (status {response.status_code})")
             return OllamaGenerateResponse(**raw_response_data)
         except httpx.RequestError as e:
             logger.error(f"[OllamaClient] HTTPX Request Error: {e}")

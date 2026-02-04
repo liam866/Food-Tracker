@@ -20,8 +20,8 @@ async def generate_response(prompt: str, ollama_client: "OllamaClient") -> Optio
             prompt=prompt,
             stream=False,
             options={
-                "temperature": 0.7,
-                "num_predict": 128,
+                "temperature": 0.2,
+                "num_predict": 512,
             }
         )
 

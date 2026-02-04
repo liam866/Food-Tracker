@@ -9,6 +9,18 @@ services:
       - qdrant_storage:/qdrant/storage
     env_file: .env
 
+  vector:
+    build: ./vector_service
+    ports:
+      - "8003:8000"
+    volumes:
+      - ./vector_service/app:/app/app
+    env_file: .env
+    environment:
+      OLLAMA_MODEL: ${EMBED_MODEL}
+    depends_on:
+      - qdrant
+
   relational:
     build: ./relational
     ports:
@@ -23,8 +35,6 @@ services:
     depends_on:
       - vector
 
- 
-
   api:
     build: ./api
     ports:
@@ -35,17 +45,8 @@ services:
     environment:
       OLLAMA_MODEL: ${CHAT_MODEL}
     depends_on:
-      - relational vector:
-    build: ./vector_service
-    ports:
-      - "8003:8000"
-    volumes:
-      - ./vector_service/app:/app/app
-    env_file: .env
-    environment:
-      OLLAMA_MODEL: ${EMBED_MODEL}
-    depends_on:
-      - qdrant
+      - relational
+      - vector
 
   vision:
     build: ./vision

@@ -8,7 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.lifespan import lifespan_handler
-from app.routes import foods, logs, user, chat
+from app.routes import foods, logs, user, chat, menu
 from app.clients.ollama_client import OllamaClient # Import OllamaClient
 from app.core.config import settings # Import settings
 from app.schemas.ollama import OllamaGenerateRequest # Import for health check
@@ -55,6 +55,7 @@ app.include_router(foods.router)
 app.include_router(logs.router)
 app.include_router(user.router)
 app.include_router(chat.router)
+app.include_router(menu.router)
 
 @app.get("/health")
 async def health_check():

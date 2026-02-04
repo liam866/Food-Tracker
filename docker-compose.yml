@@ -15,10 +15,9 @@ services:
     volumes:
       - ./relational/app:/app/app
       - ./data:/app/data
-      - ./api/food_data.csv:/app/food_data.csv
+      - ./relational/food_data.csv:/app/food_data.csv
     environment:
       DATABASE_URL: "sqlite:///./data/foodtracker.db"
-      VECTOR_SERVICE_URL: "http://vector:8000"
 
   vector:
     build: ./vector_service
@@ -45,6 +44,7 @@ services:
       OLLAMA_MODEL: "qwen2.5:0.5b"
     depends_on:
       - relational
+      - vector
 
   vision:
     build: ./vision

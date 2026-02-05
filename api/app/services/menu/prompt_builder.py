@@ -35,9 +35,8 @@ NUTRITIONAL DATA (WARNING: These values are PER 100g. You MUST multiply these by
 
     prompt += """
 CRITICAL STEP-BY-STEP LOGIC:
-1. ESTIMATE: Look at the item name. How much does a "Dinner" or "Soup" usually weigh? (e.g., 350g-500g for a main). 
-2. CALCULATE: (Weight / 100) * (Calories per 100g). Do NOT just report the 100g number!
-3. VERIFY: Does this specific meal actually help them reach their protein goal?
+1. ESTIMATE: Use your knowledge of common portion sizes and ingredients to make an educated guess about the weight of the meal and its composition. Be as specific as possible in your reasoning (e.g., "This looks like a standard burger, which typically weighs around 150g, so I will calculate based on that").
+2. VERIFY: Does this specific meal actually help them reach their protein goal?
 
 COACHING STYLE REQUIREMENTS:
 - BE VARIED: Do NOT use the same sentence structure for different items. 
@@ -50,7 +49,7 @@ OUTPUT FORMAT (STRICT JSON):
   "recommendations": [
     {
       "name": "Exact Menu Item Name",
-      "reasoning": "You're crushing your goals! I've estimated this at a hearty 400g serving, giving you about X total protein to really fuel your muscles. It fits your remaining calories perfectly—enjoy every bite!"
+      "reasoning": "Encouraging, specific, and unique reasoning for this item based on it's specific nutritional data.",
     }
   ]
 }

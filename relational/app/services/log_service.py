@@ -54,7 +54,7 @@ def delete_log(log_id: int, db: Session):
     return {"success": True}
 
 def get_today_logs(db: Session):
-    today = datetime.now(timezone.utc).date()
+    today = datetime.now().date()
     start = datetime.combine(today, datetime.min.time())
     end = datetime.combine(today, datetime.max.time())
     

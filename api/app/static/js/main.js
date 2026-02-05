@@ -7,6 +7,7 @@ import { renderSearchResults, renderFoodDetail } from './components/quickAdd.js'
 import { renderLogList } from './components/log.js';
 import { renderAiOverview } from './components/aiOverview.js';
 import { getAiOverviewData } from "./services/aiLogic.js";
+import { initMenuScan } from "./components/menuScan.js";
 
 
 // --- DOM ELEMENT REFERENCES ---
@@ -229,4 +230,5 @@ export async function initApp() {
     }
 }
 
+initMenuScan();
 initApp();

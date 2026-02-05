@@ -158,8 +158,27 @@
                 </div>
                 
                 <!-- Scan Page -->
-                <div id="scan-page" class="hidden">
-                    <p class="text-center text-slate-500">Scan feature coming soon.</p>
+                <div id="scan-page" class="hidden space-y-6">
+                    <div class="bg-white p-6 rounded-xl border border-slate-200">
+                        <h2 class="text-sm font-medium text-slate-600 uppercase tracking-wide mb-2">Menu Recommendation</h2>
+                        <p class="text-xs text-slate-500 mb-4">Upload a menu image to get grounded recommendations based on your goals.</p>
+                        
+                        <div class="flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-200 rounded-xl hover:border-slate-300 transition cursor-pointer" id="drop-zone">
+                            <i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
+                            <span class="text-sm text-slate-600">Click to upload or drag & drop</span>
+                            <input type="file" id="menu-file-input" accept="image/*" class="hidden">
+                        </div>
+                    </div>
+
+                    <div id="menu-analysis-results" class="hidden space-y-4">
+                        <div class="flex items-center gap-2 text-slate-500 text-sm italic mb-2" id="menu-loading-indicator">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <span>Analyzing menu... this may take a moment.</span>
+                        </div>
+                        <div id="recommendations-container" class="space-y-3">
+                            <!-- Recommendations will be injected here -->
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Profile Page -->

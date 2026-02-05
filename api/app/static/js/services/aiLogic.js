@@ -31,11 +31,20 @@ export async function getAiOverviewData(forceNewRequest = false) {
         };
     }
 
-        const logDateString = new Date(latestLog.datetime).toISOString().split('T')[0];
-        const todayDateString = new Date().toISOString().split('T')[0];
+        const logDate = new Date(latestLog.datetime);
+        const today = new Date();
+
+        const toLocalDateString = (date) => {
+        const offset = date.getTimezoneOffset();
+        const adjustedDate = new Date(date.getTime() - (offset * 60 * 1000));
+        return adjustedDate.toISOString().split('T')[0];
+    };
+
+        const logDateString = toLocalDateString(logDate);
+        const todayDateString = toLocalDateString(today);
 
         const isToday = logDateString === todayDateString;
-
+        
         if (!isToday) {
             console.log(`[AI Logic] Log date (${logDateString}) does not match today (${todayDateString}).`);
             clearLLMResponse();

@@ -59,7 +59,24 @@ async def analyze_menu(
     
     if parsed_response and "recommendations" in parsed_response:
         try:
-            logger.info(f"[MenuService] Successfully generated {len(parsed_response['recommendations'])} recommendations.")
+            # Map context to each recommendation
+            for rec in parsed_response['recommendations']:
+                matched_item = next((item for item in context_data if item.menu_item == rec['name']), None)
+                if matched_item:
+                    #Convert the context objects to dictionaries
+                    rec['context'] = [
+                        {
+                            "food_name": getattr(c, 'food_name', ''),
+                            "calories": getattr(c, 'calories', 0),
+                            "protein": getattr(c, 'protein', 0),
+                            # Add any other fields your FoodContext schema requires
+                        } 
+                        for c in matched_item.context
+                    ]
+                else:
+                    rec['context'] = []
+                    
+            logger.info(f"[MenuService] Successfully generated {len(parsed_response['recommendations'])} recommendations with context.")
             return MenuAnalysisResponse(**parsed_response)
         except Exception as e:
             logger.error(f"[MenuService] Validation error on LLM response: {e}")

@@ -1,6 +1,6 @@
-# Food Tracker 
+# Nutrition Tracker 
 
-Food Tracker is a containerized food tracking application with OCR-based menu parsing and AI-assisted recommendations via RAG. It is built as a modular microservices system with clearly separated responsibilities and grounded data flow.
+Nutrition Tracker is a containerized food tracking application with OCR-based menu parsing and AI-assisted recommendations via RAG. It is built as a modular microservices system with clearly separated responsibilities and grounded data flow.
 
 ## Key Features
 

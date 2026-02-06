@@ -124,7 +124,7 @@ Once all services are running (this may take a few moments, especially during in
 
 `http://localhost:8000`
 
-## 🔮 Possible Extensions
+## Possible Extensions
 
 *   Authentication and multi-user support
 *   Long-term dietary analytics and trend visualization

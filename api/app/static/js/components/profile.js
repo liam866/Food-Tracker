@@ -33,11 +33,18 @@ export function renderProfile() {
 
     // Highlight current goal
     state.selectedGoal = state.userProfile.goal;
-    goalButtons.forEach(b => {
-         const isSelected = b.dataset.goal === state.selectedGoal;
-         b.classList.toggle("bg-slate-900", isSelected);
-         b.classList.toggle("text-white", isSelected);
-         b.classList.toggle("bg-white", !isSelected);
-         b.classList.toggle("border-slate-200", !isSelected);
-    });
-}
+        goalButtons.forEach(b => {
+            const isSelected = b.dataset.goal === state.selectedGoal;
+            
+            // Remove ALL possible conflicting styles first
+            b.classList.remove("active-goal-button-orange", "text-white", "bg-slate-900", "bg-white", "border-slate-200");
+
+            if (isSelected) {
+                // Apply Orange to current goal
+                b.classList.add("active-goal-button-orange", "text-white");
+            } else {
+                // Apply White to others
+                b.classList.add("bg-white", "border-slate-200");
+            }
+        });
+    }

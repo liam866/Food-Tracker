@@ -75,11 +75,11 @@ document.getElementById('confirm-delete-btn').addEventListener('click', async ()
 goalButtons.forEach(btn => {
     btn.addEventListener('click', () => {
         goalButtons.forEach(b => {
-            b.classList.remove('bg-slate-900', 'text-white');
+            b.classList.remove('active-goal-button-orange', 'text-white', 'bg-slate-900');
             b.classList.add('bg-white', 'border-slate-200');
         });
-        btn.classList.add('bg-slate-900', 'text-white');
         btn.classList.remove('bg-white', 'border-slate-200');
+        btn.classList.add('active-goal-button-orange', 'text-white');
         state.selectedGoal = btn.dataset.goal; 
         console.log("Selected goal for update:", state.selectedGoal);
     });

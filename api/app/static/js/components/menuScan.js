@@ -1,36 +1,19 @@
 import { analyzeMenuImage } from "../services/menuScanLogic.js";
 
 export function initMenuScan() {
-    const dropZone = document.getElementById("drop-zone");
+    const scanBtn = document.getElementById("scan-btn");
     const fileInput = document.getElementById("menu-file-input");
 
-    if (!dropZone || !fileInput) return;
+    if (!scanBtn || !fileInput) return;
 
-    dropZone.onclick = () => fileInput.click();
+    scanBtn.onclick = () => fileInput.click();
 
     fileInput.onchange = async (e) => {
         const file = e.target.files[0];
         if (file) {
             await handleScan(file);
-        }
-    };
-
-    // Simple drag & drop support
-    dropZone.ondragover = (e) => {
-        e.preventDefault();
-        dropZone.classList.add("border-slate-400");
-    };
-
-    dropZone.ondragleave = () => {
-        dropZone.classList.remove("border-slate-400");
-    };
-
-    dropZone.ondrop = async (e) => {
-        e.preventDefault();
-        dropZone.classList.remove("border-slate-400");
-        const file = e.dataTransfer.files[0];
-        if (file && file.type.startsWith("image/")) {
-            await handleScan(file);
+            // Reset input so the same file can be selected again if needed
+            fileInput.value = "";
         }
     };
 }

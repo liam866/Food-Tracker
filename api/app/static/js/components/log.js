@@ -21,7 +21,7 @@ export function renderLogList(logs, listId) {
     logs.forEach((log) => {
         const logItem = document.createElement("div");
         logItem.className =
-            "bg-white px-4 py-5 rounded-xl border border-slate-200 flex justify-between items-center";
+            "bg-white px-4 py-5 rounded-xl border food-log-outline-orange flex justify-between items-center";
         logItem.innerHTML = `
             <div class="space-y-1">
                 <p class="font-semibold text-slate-800">${log.name}</p>

@@ -1,3 +1,9 @@
+:root {
+    --orange-light: #f5b781; /* Peach */
+    --orange-medium: #ffa200; /* Orange */
+    --orange-dark: #FF8C00; /* Dark Orange */
+}
+
 /* styles.css (Minimal UI styling) */
 body {
     font-family: sans-serif;
@@ -14,5 +20,66 @@ body {
 
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    to { opacity: 1; transform: translateY(0); } /* Added closing brace */
+}
+
+#scan-btn {
+    transition: all 0.2s ease-in-out;
+}
+
+#scan-btn:active {
+    transform: scale(0.98);
+}
+
+#menu-loading-indicator {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.highlight-border {
+    border-color: var(--orange-light) !important;
+}
+
+.highlight-bg {
+    background-color: var(--orange-medium) !important;
+    color: white !important;
+}
+
+.box-outline-orange {
+    border-color: var(--orange-light) !important;
+}
+
+.food-log-outline-orange {
+    border-color: var(--orange-medium) !important;
+}
+
+.profile-button-outline-orange {
+    border-color: var(--orange-medium) !important;
+}
+
+.navigation-word-orange {
+    color: var(--orange-light) !important;
+}
+
+.quickadd-image-button-bg-orange {
+    background-color: var(--orange-dark) !important;
+    color: white !important; /* Ensure text remains visible */
+}
+
+.active-goal-button-orange {
+    background-color: var(--orange-medium) !important;
+    color: white !important;
+}
+
+.nav-bar-outline-dark-orange {
+    background-color: white !important;
+    border-color: var(--orange-dark) !important;
+}
+
+.navigation-word-black {
+    color: black !important;
 }

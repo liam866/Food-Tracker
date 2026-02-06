@@ -6,6 +6,7 @@
     <title>Food Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/static/styles.css"> <!-- Link to our custom stylesheet -->
 </head>
 <body class="text-slate-700">
     <div id="root" class="max-w-lg mx-auto p-4 pb-24">
@@ -14,41 +15,41 @@
         <div id="user-setup-view" >
             <h1 class="text-xl font-semibold text-slate-900">Welcome</h1>
             <p class="text-sm text-slate-500 mb-6">Let’s set things up so we can track your nutrition.</p>
-            <div class="bg-white p-6 rounded-xl border border-slate-200">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 box-outline-orange">
                 <h2 class="text-sm font-medium text-slate-600 uppercase tracking-wide mb-4">Create your profile</h2>
                 <form id="user-setup-form" class="space-y-4">
                      <div>
                         <label for="name" class="text-sm font-medium text-slate-700">Name</label>
-                        <input type="text" id="name" name="name" required class="mt-1 block w-full rounded-xl border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
+                        <input type="text" id="name" name="name" required class="mt-1 block w-full rounded-xl border-slate-200 box-outline-orange px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
                     </div>
                     <div>
                         <label for="age" class="text-sm font-medium text-slate-700">Age</label>
-                        <input type="number" id="age" name="age" required class="mt-1 block w-full rounded-xl border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
+                        <input type="number" id="age" name="age" required class="mt-1 block w-full rounded-xl border-slate-200 box-outline-orange px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
                     </div>
                     <div>
                         <label for="height" class="text-sm font-medium text-slate-700">Height (cm)</label>
-                        <input type="number" id="height" name="height_cm" required class="mt-1 block w-full rounded-xl border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
+                        <input type="number" id="height" name="height_cm" required class="mt-1 block w-full rounded-xl border-slate-200 box-outline-orange px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
                     </div>
                     <div>
                         <label for="weight" class="text-sm font-medium text-slate-700">Weight (kg)</label>
-                        <input type="number" id="weight" name="weight_kg" required class="mt-1 block w-full rounded-xl border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
+                        <input type="number" id="weight" name="weight_kg" required class="mt-1 block w-full rounded-xl border-slate-200 box-outline-orange px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
                     </div>
                     <div>
                         <label for="sex" class="text-sm font-medium text-slate-700">Sex</label>
-                        <select id="sex" name="sex" class="mt-1 block w-full rounded-xl border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
+                        <select id="sex" name="sex" class="mt-1 block w-full rounded-xl border-slate-200 box-outline-orange px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
                             <option value="male">Male</option>
                             <option value="female">Female</option>
                         </select>
                     </div>
                     <div>
                         <label for="goal" class="text-sm font-medium text-slate-700">Goal</label>
-                        <select id="goal" name="goal" class="mt-1 block w-full rounded-xl border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
+                        <select id="goal" name="goal" class="mt-1 block w-full rounded-xl border-slate-200 box-outline-orange px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
                             <option value="lose_fat">Lose Fat</option>
                             <option value="maintain">Maintain</option>
                             <option value="build_muscle">Build Muscle</option>
                         </select>
                     </div>
-                    <button type="submit" class="w-full rounded-xl bg-slate-900 py-3 text-sm font-medium text-white hover:bg-slate-800 transition">Get Started</button>
+                    <button type="submit" class="w-full rounded-xl quickadd-image-button-bg-orange py-3 text-sm font-medium text-white transition">Get Started</button>
                 </form>
             </div>
         </div>
@@ -66,7 +67,7 @@
                 <!-- Diary Page -->
                 <div id="diary-page">
                     <!-- Daily Summary -->
-                    <div class="bg-white p-6 rounded-xl border border-slate-200 mb-6">
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 box-outline-orange mb-6">
                         <h2 class="text-sm font-medium text-slate-600 uppercase tracking-wide mb-4">Daily Progress</h2>
                         <div class="space-y-4">
                             <!-- Calories -->
@@ -93,11 +94,11 @@
                     </div>
                     <!-- Actions -->
                     <div class="grid grid-cols-2 gap-4 mb-6">
-                        <button id="quick-add-btn" class="bg-slate-900 text-white rounded-xl py-3 text-sm font-medium hover:bg-slate-800 transition">Quick Add →</button>
-                        <button id="log-btn" class="bg-white border border-slate-200 text-slate-700 rounded-xl py-3 text-sm font-medium hover:bg-slate-100 transition">Log →</button>
+                        <button id="quick-add-btn" class="bg-slate-900 quickadd-image-button-bg-orange text-white rounded-xl py-3 text-sm font-medium hover:bg-slate-800 transition">Quick Add →</button>
+                        <button id="log-btn" class="bg-white border border-slate-200 box-outline-orange text-slate-700 rounded-xl py-3 text-sm font-medium hover:bg-slate-100 transition">Log →</button>
                     </div>
                     <!-- AI Overview Component -->
-                    <div id="ai-overview-component" class="bg-white p-6 rounded-xl border border-slate-200 text-sm mt-6">
+                    <div id="ai-overview-component" class="bg-white p-6 rounded-xl border border-slate-200 box-outline-orange text-sm mt-6">
                         <h3 class="text-sm font-medium text-slate-600 uppercase tracking-wide mb-4">AI Overview</h3>
                         <ul id="ai-overview-messages" class="list-disc list-inside space-y-2">
                             <!-- AI messages will be injected here -->
@@ -113,7 +114,7 @@
                         id="food-search-input"
                         placeholder="Search foods..."
                         autocomplete="off"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition"
+                        class="w-full rounded-xl border border-slate-300 box-outline-orange px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition"
                         />
                     </div>
 
@@ -122,7 +123,7 @@
 
                 <!-- Food Detail Page -->
                 <div id="food-detail-page" class="hidden">
-                    <div class="bg-white p-6 rounded-xl border border-slate-200">
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 box-outline-orange">
                         <h2 id="food-detail-name" class="font-semibold text-slate-900 mb-4"></h2>
 
                         <form id="add-log-form">
@@ -131,7 +132,7 @@
                             <div>
                                 <label for="grams" class="text-sm font-medium text-slate-700">Amount (g)</label>
                                 <input type="number" id="grams" value="100"
-                                    class="mt-1 block w-full rounded-xl border-slate-200 px-4 py-3">
+                                    class="mt-1 block w-full rounded-xl border-slate-200 box-outline-orange px-4 py-3">
                             </div>
 
                             <div class="mt-4 text-sm space-y-1">
@@ -142,7 +143,7 @@
                             </div>
 
                             <button type="submit"
-                                class="mt-6 w-full rounded-xl bg-slate-900 py-3 text-white">
+                                class="mt-6 w-full rounded-xl quickadd-image-button-bg-orange py-3 text-white">
                                 Add to Diary
                             </button>
                         </form>
@@ -159,15 +160,17 @@
                 
                 <!-- Scan Page -->
                 <div id="scan-page" class="hidden space-y-6">
-                    <div class="bg-white p-6 rounded-xl border border-slate-200">
-                        <h2 class="text-sm font-medium text-slate-600 uppercase tracking-wide mb-2">Menu Recommendation</h2>
-                        <p class="text-xs text-slate-500 mb-4">Upload a menu image to get grounded recommendations based on your goals.</p>
-                        
-                        <div class="flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-200 rounded-xl hover:border-slate-300 transition cursor-pointer" id="drop-zone">
-                            <i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
-                            <span class="text-sm text-slate-600">Click to upload or drag & drop</span>
-                            <input type="file" id="menu-file-input" accept="image/*" class="hidden">
+                    <div class="bg-white p-8 rounded-xl border border-slate-200 box-outline-orange text-center">
+                        <div class="inline-flex items-center justify-center w-12 h-12 bg-slate-50 text-slate-400 rounded-full mb-4">
+                            <i class="fas fa-camera text-xl"></i>
                         </div>
+                        <h2 class="text-lg font-semibold text-slate-900 mb-1">Analyze Menu</h2>
+                        <p class="text-sm text-slate-500 mb-6">Take a photo or upload a menu to find the best options for your goals.</p>
+                        
+                        <button id="scan-btn" class="w-full rounded-xl bg-slate-900 quickadd-image-button-bg-orange py-3.5 text-sm font-medium text-white hover:bg-slate-800 transition shadow-sm">
+                            <i class="fas fa-upload mr-2 opacity-70"></i> Select Menu Image
+                        </button>
+                        <input type="file" id="menu-file-input" accept="image/*" class="hidden">
                     </div>
 
                     <div id="menu-analysis-results" class="hidden space-y-4">
@@ -185,59 +188,59 @@
                 <div id="profile-page" class="hidden">
                     <!-- Main Profile View -->
                     <div id="profile-main-view">
-                        <div class="bg-white p-6 rounded-xl border border-slate-200 mb-6 text-center">
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 box-outline-orange mb-6 text-center">
                             <h2 id="profile-name" class="text-2xl font-bold text-slate-900"></h2>
                             <p class="text-sm text-slate-500">Your personalized nutrition hub</p>
                         </div>
                         <div class="space-y-3">
-                            <button id="update-goals-btn" class="w-full text-center rounded-xl bg-white border border-slate-200 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 transition">Update Goals</button>
-                            <button id="update-info-btn" class="w-full text-center rounded-xl bg-white border border-slate-200 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 transition">Update Info</button>
+                            <button id="update-goals-btn" class="w-full text-center rounded-xl bg-white border border-slate-200 profile-button-outline-orange py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 transition">Update Goals</button>
+                            <button id="update-info-btn" class="w-full text-center rounded-xl bg-white border border-slate-200 profile-button-outline-orange py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 transition">Update Info</button>
                             <button id="delete-account-btn" class="w-full text-center rounded-xl py-3 text-sm font-medium text-rose-600 hover:bg-rose-50 transition">Delete Account</button>
                         </div>
                     </div>
 
                     <!-- Update Goals View -->
                     <div id="update-goals-view" class="hidden">
-                        <div class="bg-white p-6 rounded-xl border border-slate-200">
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 box-outline-orange">
                             <h2 class="text-sm font-medium text-slate-600 uppercase tracking-wide mb-4">Select Your Goal</h2>
                             <div id="goal-buttons" class="space-y-3">
                                 <button data-goal="lose_fat" class="goal-btn w-full text-center rounded-xl py-3 text-sm font-medium transition">Lose Fat</button>
                                 <button data-goal="maintain" class="goal-btn w-full text-center rounded-xl py-3 text-sm font-medium transition">Maintain</button>
                                 <button data-goal="build_muscle" class="goal-btn w-full text-center rounded-xl py-3 text-sm font-medium transition">Build Muscle</button>
                             </div>
-                            <button id="save-goal-btn" class="mt-6 w-full rounded-xl bg-slate-900 py-3 text-sm font-medium text-white hover:bg-slate-800 transition">Save</button>
+                            <button id="save-goal-btn" class="mt-6 w-full rounded-xl quickadd-image-button-bg-orange py-3 text-sm font-medium text-white transition">Save</button>
                         </div>
                     </div>
 
                     <!-- Update Info View -->
                     <div id="update-info-view" class="hidden">
-                        <div class="bg-white p-6 rounded-xl border border-slate-200">
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 box-outline-orange">
                             <h2 class="text-sm font-medium text-slate-600 uppercase tracking-wide mb-4">Your Info</h2>
                             <form id="update-info-form" class="space-y-4">
                                 <div>
                                     <label for="update-name" class="text-sm font-medium text-slate-700">Name</label>
-                                    <input type="text" id="update-name" name="name" required class="mt-1 block w-full rounded-xl border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
+                                    <input type="text" id="update-name" name="name" required class="mt-1 block w-full rounded-xl border-slate-200 box-outline-orange px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
                                 </div>
                                 <div>
                                     <label for="update-age" class="text-sm font-medium text-slate-700">Age</label>
-                                    <input type="number" id="update-age" name="age" required class="mt-1 block w-full rounded-xl border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
+                                    <input type="number" id="update-age" name="age" required class="mt-1 block w-full rounded-xl border-slate-200 box-outline-orange px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
                                 </div>
                                 <div>
                                     <label for="update-height" class="text-sm font-medium text-slate-700">Height (cm)</label>
-                                    <input type="number" id="update-height" name="height_cm" required class="mt-1 block w-full rounded-xl border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
+                                    <input type="number" id="update-height" name="height_cm" required class="mt-1 block w-full rounded-xl border-slate-200 box-outline-orange px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
                                 </div>
                                 <div>
                                     <label for="update-weight" class="text-sm font-medium text-slate-700">Weight (kg)</label>
-                                    <input type="number" id="update-weight" name="weight_kg" required class="mt-1 block w-full rounded-xl border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
+                                    <input type="number" id="update-weight" name="weight_kg" required class="mt-1 block w-full rounded-xl border-slate-200 box-outline-orange px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
                                 </div>
                                 <div>
                                     <label for="update-sex" class="text-sm font-medium text-slate-700">Sex</label>
-                                    <select id="update-sex" name="sex" class="mt-1 block w-full rounded-xl border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
+                                    <select id="update-sex" name="sex" class="mt-1 block w-full rounded-xl border-slate-200 box-outline-orange px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
                                     </select>
                                 </div>
-                                <button type="submit" class="mt-6 w-full rounded-xl bg-slate-900 py-3 text-sm font-medium text-white hover:bg-slate-800 transition">Save</button>
+                                <button type="submit" class="mt-6 w-full rounded-xl quickadd-image-button-bg-orange py-3 text-sm font-medium text-white transition">Save</button>
                             </form>
                         </div>
                     </div>
@@ -245,7 +248,7 @@
             </main>
 
             <!-- Navigation -->
-            <nav class="fixed bottom-4 left-1/2 -translate-x-1/2 w-full max-w-sm bg-white/70 backdrop-blur-sm p-2 rounded-2xl border border-slate-200 flex justify-around items-center text-sm">
+            <nav class="fixed bottom-4 left-1/2 -translate-x-1/2 w-full max-w-sm nav-bar-outline-dark-orange p-2 rounded-2xl border flex justify-around items-center text-sm">
                 <button data-page="diary" class="nav-btn flex-1 flex flex-col items-center gap-1 p-2 rounded-lg transition">
                     <span>Diary</span>
                 </button>
@@ -263,11 +266,11 @@
 
         <!-- Delete Account Modal -->
         <div id="delete-modal" class="fixed inset-0 bg-black/30 backdrop-blur-sm hidden items-center justify-center">
-            <div class="bg-white p-6 rounded-xl border border-slate-200 max-w-sm w-full text-center">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 box-outline-orange max-w-sm w-full text-center">
                 <h2 class="text-lg font-semibold text-slate-900 mb-2">Are you sure?</h2>
                 <p class="text-sm text-slate-500 mb-6">This will permanently delete your profile and all your data.</p>
                 <div class="grid grid-cols-2 gap-4">
-                    <button id="cancel-delete-btn" class="w-full rounded-xl bg-white border border-slate-200 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 transition">Cancel</button>
+                    <button id="cancel-delete-btn" class="w-full rounded-xl bg-white border border-slate-200 box-outline-orange py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 transition">Cancel</button>
                     <button id="confirm-delete-btn" class="w-full rounded-xl bg-rose-600 py-3 text-sm font-medium text-white hover:bg-rose-500 transition">Delete</button>
                 </div>
             </div>

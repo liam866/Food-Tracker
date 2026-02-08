@@ -1,6 +1,6 @@
-# Nutrition Tracker
+# Menu-to-Insight: Microservices OCR & RAG Pipeline
 
-Nutrition Tracker is a containerized food‑tracking application that combines OCR‑based menu parsing with Retrieval‑Augmented Generation (RAG) to produce grounded, explainable dietary recommendations. The system is implemented as a modular microservices architecture with clearly separated responsibilities and a fully traceable end‑to‑end data flow.
+Menu-to-Insight is a containerised system that converts restaurant menu images into helpful dietary recommendations. By combining OCR-based layout detection with Retrieval-Augmented Generation (RAG), the application provides grounded nutritional recommendations with verifiable reasoning. The system is built on a modular microservices architecture, ensuring a traceable data flow from raw image ingestion to final LLM inference.
 
 ---
 
